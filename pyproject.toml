@@ -1,0 +1,17 @@
+[tool.pdm]
+
+[project]
+name = "pdf-tool"
+version = "0.0.1"
+description = "CLI with pdf tools"
+authors = [
+    {name = "Paul TORCHET", email = "ptorchet.dev@gmail.com"},
+]
+dependencies = [
+    "pypdf2>=3.0.1",
+    "rich>=13.0.1",
+    "click>=8.1.3",
+    "click-aliases>=1.0.1",
+]
+requires-python = ">=3.11"
+license = {text = "MIT"}
