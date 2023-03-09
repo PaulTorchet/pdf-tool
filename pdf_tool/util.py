@@ -18,6 +18,18 @@ def get_filename(file_path: str, include_extension: bool = False) -> str:
     return filename
 
 
+def get_file_directory(file_path: str) -> str:
+    return os.path.dirname(file_path)
+
+
+def append_suffix_to_filename(file_path: str, suffix) -> str:
+    new_filename = get_filename(file_path) + suffix + ".pdf"
+    directory = get_file_directory(
+        file_path)
+
+    return os.path.join(directory, new_filename)
+
+
 def get_file_size(file_path: str):
     b_size = os.stat(file_path).st_size
 
@@ -29,3 +41,7 @@ def get_file_size(file_path: str):
         "kilobytes": round(kb_size, 2),
         "megabytes": round(mb_size, 2),
     }
+
+
+if __name__ == "__main__":
+    print(append_suffix_to_filename("pdfs/Oblivion.PDF", "-compressed"))

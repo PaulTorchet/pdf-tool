@@ -6,11 +6,11 @@
   - PDF
     - Interval
     - Range
-  - Pages
+  - Cut
     - Vertically
     - Horizontally
-- Contrast
+- Contrast | OK
 - Reorganize
 - Rename
-- Stats / Info
-- Compress
+- Stats / Info | OK
+- Compress | BOF
