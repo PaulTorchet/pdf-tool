@@ -28,10 +28,11 @@ def print_info_table(pdf_info):
     table.add_column("Value")
 
     table.add_row("File name", pdf_info["file_name"])
-    table.add_row("PDF title", pdf_info["pdf_title"])
+    table.add_row("PDF title", pdf_info["pdf_title"] or "-")
     table.add_row(
         "Pages count", f"{pdf_info['pages_count']} page{'s' if pdf_info['pages_count'] > 1 else None}")
     table.add_row("File size", f"{pdf_info['size']['megabytes']} Mb")
+    table.add_row("Author", f"{pdf_info['author'] or '-'}")
 
     print(table)
 
