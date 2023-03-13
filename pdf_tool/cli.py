@@ -16,7 +16,7 @@ from pdf_tool import util
 
 
 @click.group(cls=ClickAliasedGroup)
-@click.version_option(prog_name="pdf-tool")
+@click.version_option(prog_name="pdf-tool", version="0.0.1")
 def cli():
     """CLI with pdf tools."""
     pass
