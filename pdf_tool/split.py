@@ -1,8 +1,6 @@
 import os
 
-from PyPDF2 import PdfReader, PdfWriter, PageObject
-
-from util import get_filename
+from PyPDF2 import PdfReader, PdfWriter
 
 
 def split_array_by_interval(array: list, interval: int) -> list[list]:

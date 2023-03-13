@@ -2,18 +2,15 @@ import os
 
 import click
 
-from click.exceptions import BadParameter
-
 from click_aliases import ClickAliasedGroup
+
+from pdf_tool import util
 
 from pdf_tool.info import display_pdf_info
 from pdf_tool.contrast import change_pdf_contrast
 from pdf_tool.split import split_pdf_by_interval, split_pdf_by_ranges
 from pdf_tool.reorganize import reorganize_pdf
-
 from pdf_tool.cli_validators import validate_ranges, validate_order
-
-from pdf_tool import util
 
 
 @click.group(cls=ClickAliasedGroup)
