@@ -9,7 +9,7 @@
   - Vertically
   - Horizontally
 - Contrast | OK
-- Reorganize
+- Reorganize OK
 - Rename
 - Stats / Info | OK
 - Compress | BOF

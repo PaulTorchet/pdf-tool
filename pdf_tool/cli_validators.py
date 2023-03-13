@@ -23,5 +23,18 @@ def validate_ranges(ctx, param, value):
     return formatted_ranges
 
 
+def validate_order(ctx, param, value):
+
+    indexes = []
+
+    for index in value:
+        try:
+            indexes.append(int(index))
+        except ValueError:
+            raise BadParameter(f"'{index}'. Must be an integer.")
+
+    return indexes
+
+
 if __name__ == "__main__":
     print(validate_ranges(None, None, "1-2 5 3-4"))

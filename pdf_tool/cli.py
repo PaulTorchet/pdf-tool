@@ -9,8 +9,9 @@ from click_aliases import ClickAliasedGroup
 from pdf_tool.info import display_pdf_info
 from pdf_tool.contrast import change_pdf_contrast
 from pdf_tool.split import split_pdf_by_interval, split_pdf_by_ranges
+from pdf_tool.reorganize import reorganize_pdf
 
-from pdf_tool.cli_validators import validate_ranges
+from pdf_tool.cli_validators import validate_ranges, validate_order
 
 from pdf_tool import util
 
@@ -83,6 +84,19 @@ def split_interval(file, interval, destination, name):
 
     split_pdf_by_interval(
         file_path=file, destination=destination, output_name=name, interval=interval)
+
+
+@cli.command(aliases=["r"])
+@click.argument("file", type=click.Path(exists=True, dir_okay=False))
+@click.argument("order", type=str, required=True, nargs=-1, callback=validate_order)
+@click.option("--output", "-o", type=click.Path(exists=False, dir_okay=False), help="Output file.")
+def reorganize(file, order, output):
+    """Reorganize PDF pages."""
+
+    if output is None:
+        output = util.append_suffix_to_filename(file, "-reorganized")
+
+    reorganize_pdf(file_path=file, destination=output, pages_order=order)
 
 
 if __name__ == "__main__":

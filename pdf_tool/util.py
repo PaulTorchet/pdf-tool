@@ -43,5 +43,27 @@ def get_file_size(file_path: str):
     }
 
 
+def reorganize_array(array: list, order: list) -> str:
+    """Reorganize an array with a list of indexes.
+
+    Args:
+        array (list): Array to reorganize
+        order (list): List of indexes.
+
+    Returns:
+        str: Reorganized array.
+    """
+    organized_array = []
+
+    for index in order:
+        organized_array.append(array[index - 1])
+
+    return organized_array
+
+
 if __name__ == "__main__":
     print(append_suffix_to_filename("pdfs/Oblivion.PDF", "-compressed"))
+
+    base_array = ["a", "b", "c", "d", "e", "f"]
+
+    print(reorganize_array(base_array, [1, 3, 2, 5]))
