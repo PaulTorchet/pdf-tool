@@ -1,5 +1,7 @@
 import os
 
+from PyPDF2 import PdfWriter
+
 
 def get_filename(file_path: str, include_extension: bool = False) -> str:
     """Get file name without path nor extension.
@@ -59,6 +61,24 @@ def reorganize_array(array: list, order: list) -> str:
         organized_array.append(array[index - 1])
 
     return organized_array
+
+
+def write_pdf(pdf_writer: PdfWriter, output_path: str, metadata):
+    custom_metadata = {
+        "/Producer": "PDF-Tool by PaulTorchet",
+        "/Author": "PDF-Tool by PaulTorchet",
+        "/Title": get_filename(output_path)
+    }
+
+    if metadata is None:
+        output_metadata = custom_metadata
+    else:
+        output_metadata = {**metadata, **custom_metadata}
+
+    pdf_writer.add_metadata(output_metadata)
+
+    with open(output_path, "wb") as file:
+        pdf_writer.write(file)
 
 
 if __name__ == "__main__":
