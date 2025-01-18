@@ -6,6 +6,7 @@ from click_aliases import ClickAliasedGroup
 
 from pdf_tool import util
 
+from pdf_tool.exceptions import PdfReorganizeInvalidIndexesException
 from pdf_tool.info import display_pdf_info
 from pdf_tool.contrast import change_pdf_contrast
 from pdf_tool.split import split_pdf_by_interval, split_pdf_by_ranges
@@ -93,7 +94,10 @@ def reorganize(file, order, output):
     if output is None:
         output = util.append_suffix_to_filename(file, "-reorganized")
 
-    reorganize_pdf(file_path=file, destination=output, pages_order=order)
+    try:
+        reorganize_pdf(file_path=file, destination=output, pages_order=order)
+    except PdfReorganizeInvalidIndexesException as error:
+        raise click.BadArgumentUsage(str(error))
 
 
 if __name__ == "__main__":
