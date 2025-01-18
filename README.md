@@ -6,8 +6,8 @@
   - Interval | OK
   - Range | OK
 - Cut
-  - Vertically
-  - Horizontally
+  - Vertically | OK
+  - Horizontally | OK
 - Contrast | OK
 - Reorganize OK
 - Stats / Info | OK
