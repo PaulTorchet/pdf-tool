@@ -1,13 +1,11 @@
 from typing import List
 
-from PyPDF2 import PdfReader, PdfWriter
-
 from pdf_tool.exceptions import PdfReorganizeInvalidIndexesException
-from pdf_tool.util import reorganize_array, write_pdf
+from pdf_tool.util import read_pdf, reorganize_array, write_pdf
 
 
 def reorganize_pdf(file_path: str, destination: str, pages_order: List[int]):
-    pdf = PdfReader(file_path)
+    pdf = read_pdf(file_path)
 
     pages_count = len(pdf.pages)
 
@@ -18,9 +16,4 @@ def reorganize_pdf(file_path: str, destination: str, pages_order: List[int]):
 
     reorganized_pages = reorganize_array(pdf.pages, order=pages_order)
 
-    writer = PdfWriter()
-
-    for page in reorganized_pages:
-        writer.add_page(page)
-
-    write_pdf(pdf_writer=writer, output_path=destination, metadatas=pdf.metadata)
+    write_pdf(pages=reorganized_pages, output_path=destination, metadatas=pdf.metadata)

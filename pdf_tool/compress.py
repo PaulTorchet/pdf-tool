@@ -1,18 +1,13 @@
-from PyPDF2 import PdfReader, PdfWriter
+from pdf_tool.util import read_pdf, write_pdf
 
 
 def compress_pdf(file_path: str, output: str):
-    reader = PdfReader(file_path)
-    writer = PdfWriter()
+    pdf = read_pdf(file_path)
 
-    for page in reader.pages:
+    for page in pdf.pages:
         page.compress_content_streams()  # This is CPU intensive!
-        writer.add_page(page)
 
-    writer.add_metadata(reader.metadata)
-
-    with open(output, "wb") as f:
-        writer.write(f)
+    write_pdf(pages=pdf.pages, output_path=output, metadatas=pdf.metadata)
 
 
 if __name__ == "__main__":

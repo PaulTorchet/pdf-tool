@@ -5,18 +5,17 @@ import json
 from rich import print
 from rich.table import Table
 
-from PyPDF2 import PdfReader
-from pdf_tool import util
+from pdf_tool.util import get_filename, get_file_size, read_pdf
 
 
 def get_pdf_info(file_path: str) -> Dict[str, Any]:
-    pdf = PdfReader(file_path)
+    pdf = read_pdf(file_path)
 
     info = {
         "pages_count": len(pdf.pages),
-        "file_name": util.get_filename(file_path, with_extension=True),
+        "file_name": get_filename(file_path, with_extension=True),
         "pdf_title": pdf.metadata.title,
-        "size": util.get_file_size(file_path),
+        "size": get_file_size(file_path),
         "author": pdf.metadata.author,
     }
 

@@ -1,6 +1,6 @@
 import os
 
-from PyPDF2 import PdfReader, PdfWriter
+from pdf_tool.util import read_pdf, write_pdf
 
 
 def split_array_by_interval(array: list, interval: int) -> list[list]:
@@ -47,19 +47,13 @@ def write_pdf_chunks(pdf_chunks: list, destination: str, filename: str):
         os.makedirs(destination)
 
     for index, chunk in enumerate(pdf_chunks):
-        writer = PdfWriter()
-
         chunk_name = filename.strip() + " " + str(index + 1) + ".pdf"
 
-        for page in chunk:
-            writer.add_page(page)
-
-        with open(os.path.join(destination, chunk_name), "wb") as output_pdf:
-            writer.write(output_pdf)
+        write_pdf(pages=chunk, output_path=os.path.join(destination, chunk_name))        
 
 
 def split_pdf_by_interval(file_path: str, destination: str, output_name: str, interval: int):
-    pdf = PdfReader(file_path)
+    pdf = read_pdf(file_path)
 
     pdf_chunks = split_array_by_interval(array=pdf.pages, interval=interval)
 
@@ -71,7 +65,7 @@ def split_pdf_by_interval(file_path: str, destination: str, output_name: str, in
 
 
 def split_pdf_by_ranges(file_path: str, destination: str, output_name: str, ranges: list[tuple]):
-    pdf = PdfReader(file_path)
+    pdf = read_pdf(file_path)
 
     pdf_chunks = split_array_by_ranges(array=pdf.pages, ranges=ranges)
 
