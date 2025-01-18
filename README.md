@@ -10,11 +10,13 @@
   - Horizontally
 - Contrast | OK
 - Reorganize OK
-- Rename
 - Stats / Info | OK
 - Compress | BOF
+- Merge
+- Rotate
 
 ## Improvements
 
 - Set metadatas
-- Validation / Confirm
+- Validation / Confirm (if overwriting existing file ? else --force)
+- Preview / dry-run mode ?
