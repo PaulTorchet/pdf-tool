@@ -112,17 +112,30 @@ def reorganize_array(array: list, order: list) -> str:
     return organized_array
 
 
-def write_pdf(pdf_writer: PdfWriter, output_path: str, metadata):
-    custom_metadata = {
+def sanitize_metadatas(metadatas: Dict[str, Any]) -> Dict[str, str]:
+    """Transform metadatas dictionary values to strings.
+
+    Args:
+        metadatas (Dict[str, Any]): Input metadatas dictionary.
+
+    Returns:
+        Dict[str, str]: Sanitized metadatas dictionary.
+    """
+    return {key: str(value) for key, value in metadatas.items()}
+
+
+def write_pdf(
+    pdf_writer: PdfWriter, output_path: str, metadatas: Optional[Dict[str, Any]] = None
+):
+    custom_metadatas = {
         "/Producer": "PDF-Tool by PaulTorchet",
         "/Author": "PDF-Tool by PaulTorchet",
         "/Title": get_filename(output_path),
     }
 
-    if metadata is None:
-        output_metadata = custom_metadata
-    else:
-        output_metadata = {**metadata, **custom_metadata}
+    output_metadata = sanitize_metadatas(metadatas=metadatas) if metadatas else {}
+
+    output_metadata.update(custom_metadatas)
 
     pdf_writer.add_metadata(output_metadata)
 
