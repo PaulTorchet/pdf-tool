@@ -1,10 +1,10 @@
 import os
 
-from typing import Any, Dict, Optional
+from typing import Any, Dict, List, Optional
 
 from pathlib import Path
 
-from PyPDF2 import PdfWriter
+from PyPDF2 import PageObject, PdfReader, PdfWriter
 
 
 def get_filename(file_path: str, with_extension: bool = False) -> str:
@@ -124,9 +124,30 @@ def sanitize_metadatas(metadatas: Dict[str, Any]) -> Dict[str, str]:
     return {key: str(value) for key, value in metadatas.items()}
 
 
+def read_pdf(file_path: str) -> PdfReader:
+    """Read a PDF file.
+
+    Args:
+        file_path (str): PDF file path.
+
+    Returns:
+        PdfReader: PdfReader object.
+    """
+    return PdfReader(file_path)
+
+
 def write_pdf(
-    pdf_writer: PdfWriter, output_path: str, metadatas: Optional[Dict[str, Any]] = None
+    pages: List[PageObject],
+    output_path: str,
+    metadatas: Optional[Dict[str, Any]] = None,
 ):
+    """Write a PDF file.
+
+    Args:
+        pages (List[PageObject]): List of PDF PageObjects to write.
+        output_path (str): PDF file output path.
+        metadatas (Dict[str, Any], optional): PDF metadatas. Defaults to None.
+    """
     custom_metadatas = {
         "/Producer": "PDF-Tool by PaulTorchet",
         "/Author": "PDF-Tool by PaulTorchet",
@@ -137,7 +158,12 @@ def write_pdf(
 
     output_metadata.update(custom_metadatas)
 
-    pdf_writer.add_metadata(output_metadata)
+    writer = PdfWriter()
+
+    for page in pages:
+        writer.add_page(page=page)
+
+    writer.add_metadata(output_metadata)
 
     with open(output_path, "wb") as file:
-        pdf_writer.write(file)
+        writer.write(file)
