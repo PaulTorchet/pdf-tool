@@ -1,3 +1,5 @@
+from typing import Any, Dict
+
 import json
 
 from rich import print
@@ -7,7 +9,7 @@ from PyPDF2 import PdfReader
 from pdf_tool import util
 
 
-def get_pdf_info(file_path: str):
+def get_pdf_info(file_path: str) -> Dict[str, Any]:
     pdf = PdfReader(file_path)
 
     info = {
@@ -15,29 +17,33 @@ def get_pdf_info(file_path: str):
         "file_name": util.get_filename(file_path, with_extension=True),
         "pdf_title": pdf.metadata.title,
         "size": util.get_file_size(file_path),
-        "author": pdf.metadata.author
+        "author": pdf.metadata.author,
     }
 
     return info
 
 
-def print_info_table(pdf_info):
+def print_info_table(pdf_info: Dict[str, Any]) -> None:
     table = Table()
 
     table.add_column("Property")
     table.add_column("Value")
 
     table.add_row("File name", pdf_info["file_name"])
-    table.add_row("PDF title", pdf_info["pdf_title"] or "-")
+    table.add_row("PDF title", pdf_info.get("pdf_title") or "-")
     table.add_row(
-        "Pages count", f"{pdf_info['pages_count']} page{'s' if pdf_info['pages_count'] > 1 else None}")
+        "Pages count",
+        f"{pdf_info['pages_count']} page{'s' if pdf_info['pages_count'] > 1 else ''}",
+    )
     table.add_row("File size", f"{pdf_info['size']['megabytes']} Mb")
-    table.add_row("Author", f"{pdf_info['author'] or '-'}")
+    table.add_row("Author", f"{pdf_info.get('author') or '-'}")
+    table.add_row("Creat. date", f"{pdf_info.get('creation_date') or '-'}")
+    table.add_row("Modif. date", f"{pdf_info.get('modification_date') or '-'}")
 
     print(table)
 
 
-def display_pdf_info(file_path: str, output_json: bool = False):
+def display_pdf_info(file_path: str, output_json: bool = False) -> None:
     pdf_info = get_pdf_info(file_path=file_path)
 
     if output_json:
@@ -47,4 +53,5 @@ def display_pdf_info(file_path: str, output_json: bool = False):
 
 
 if __name__ == "__main__":
-    display_pdf_info("pdfs/Oblivion.PDF", True)
+    display_pdf_info(file_path="pdfs/Oblivion.PDF", output_json=True)
+    display_pdf_info(file_path="pdfs/Oblivion.PDF", output_json=False)
