@@ -1,38 +1,87 @@
 import os
 
+from typing import Any, Dict, Optional
+
+from pathlib import Path
+
 from PyPDF2 import PdfWriter
 
 
-def get_filename(file_path: str, include_extension: bool = False) -> str:
-    """Get file name without path nor extension.
+def get_filename(file_path: str, with_extension: bool = False) -> str:
+    """Get file name.
+
+    Args:
+        file_path (str): File path.
+        with_extension (bool): Flag to include extension.
+
+    Returns:
+        str: File name.
+    """
+    if with_extension:
+        return Path(file_path).name
+
+    return Path(file_path).name.split(".")[0]
+
+
+def get_file_extension(file_path: str) -> str:
+    """Get file extension.
+
+    Ex: path/to/file.ext -> .ext
+    Ex: path/to/file.ext.exp -> .ext.exp
 
     Args:
         file_path (str): File path.
 
     Returns:
-        str: File name.
+        str: File extension.
     """
-    filename = file_path.split(os.path.sep)[-1]
-
-    if not include_extension:
-        filename = filename.split(".")[0]
-
-    return filename
+    return "".join(Path(file_path).suffixes)
 
 
-def get_file_directory(file_path: str) -> str:
-    return os.path.dirname(file_path)
+def get_file_parent(file_path: str) -> str:
+    """Get file parent.
+
+    Ex: path/to/file.ext -> path/to
+
+    Args:
+        file_path (str): File path.
+
+    Returns:
+        str: File parent.
+    """
+    return Path(file_path).parent
 
 
-def append_suffix_to_filename(file_path: str, suffix) -> str:
-    new_filename = get_filename(file_path) + suffix + ".pdf"
-    directory = get_file_directory(
-        file_path)
+def append_suffix_to_filename(file_path: str, suffix: str) -> str:
+    """Append a suffix to a filename.
 
-    return os.path.join(directory, new_filename)
+    Ex: path/to/file.ext + -suffix -> path/to/file-suffix.ext
+
+    Args:
+        file_path (str): File path.
+        suffix (str): Suffix to append.
+
+    Returns:
+        str: Path with suffixed filename.
+    """
+    parent = get_file_parent(file_path=file_path)
+    filename = get_filename(file_path=file_path)
+    extension = get_file_extension(file_path=file_path)
+
+    new_filename = filename + suffix + extension
+
+    return os.path.join(parent, new_filename)
 
 
-def get_file_size(file_path: str):
+def get_file_size(file_path: str) -> Dict[str, float]:
+    """Return a dictionary with file size in bytes, Mb and Kb.
+
+    Args:
+        file_path (str): File path.
+
+    Returns:
+        Dict[str, float]: Dictionary with file sizes.
+    """
     b_size = os.stat(file_path).st_size
 
     kb_size = b_size / 1024
@@ -67,7 +116,7 @@ def write_pdf(pdf_writer: PdfWriter, output_path: str, metadata):
     custom_metadata = {
         "/Producer": "PDF-Tool by PaulTorchet",
         "/Author": "PDF-Tool by PaulTorchet",
-        "/Title": get_filename(output_path)
+        "/Title": get_filename(output_path),
     }
 
     if metadata is None:
@@ -79,11 +128,3 @@ def write_pdf(pdf_writer: PdfWriter, output_path: str, metadata):
 
     with open(output_path, "wb") as file:
         pdf_writer.write(file)
-
-
-if __name__ == "__main__":
-    print(append_suffix_to_filename("pdfs/Oblivion.PDF", "-compressed"))
-
-    base_array = ["a", "b", "c", "d", "e", "f"]
-
-    print(reorganize_array(base_array, [1, 3, 2, 5]))

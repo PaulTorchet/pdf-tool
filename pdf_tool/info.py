@@ -12,7 +12,7 @@ def get_pdf_info(file_path: str):
 
     info = {
         "pages_count": len(pdf.pages),
-        "file_name": util.get_filename(file_path, include_extension=True),
+        "file_name": util.get_filename(file_path, with_extension=True),
         "pdf_title": pdf.metadata.title,
         "size": util.get_file_size(file_path),
         "author": pdf.metadata.author

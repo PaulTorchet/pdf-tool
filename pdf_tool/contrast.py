@@ -5,7 +5,7 @@ import pdf2image
 
 from PIL import ImageEnhance, Image
 
-from util import get_filename, get_file_directory
+from pdf_tool.util import get_filename, get_file_parent
 
 DEFAULT_DPI = 300
 # DEFAULT_TILE_SIZE = (128, 128)
@@ -57,7 +57,7 @@ def change_image_contrast(image_path: str, contrast: float, tile_size: tuple[int
 
 def change_pdf_contrast(pdf_path: str, output_path: str, contrast: float):
 
-    tmp_folder = os.path.join(get_file_directory(pdf_path), "tmp")
+    tmp_folder = os.path.join(get_file_parent(pdf_path), "tmp")
 
     if not os.path.exists(tmp_folder):
         os.makedirs(tmp_folder)

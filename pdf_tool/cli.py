@@ -51,7 +51,7 @@ def split_range(file, ranges, destination, name):
 
     if destination is None:
         destination = os.path.join(
-            util.get_file_directory(file_path=file),
+            util.get_file_parent(file_path=file),
             util.get_filename(file_path=file)
         )
 
@@ -72,7 +72,7 @@ def split_interval(file, interval, destination, name):
 
     if destination is None:
         destination = os.path.join(
-            util.get_file_directory(file_path=file),
+            util.get_file_parent(file_path=file),
             util.get_filename(file_path=file)
         )
 
