@@ -38,10 +38,10 @@ def info(file, output_json):
 
 @cli.command(aliases=["cs"], no_args_is_help=True)
 @click.argument("file", type=click.Path(exists=True, dir_okay=False))
-@click.option("--contrast", "-c", type=float, default=2, help="Contrast ratio. Defaults to 2.")
+@click.option("--ratio", "-r", type=float, default=2, help="Contrast ratio. Defaults to 2.")
 @click.option("--output", "-o", type=click.Path(exists=False, dir_okay=False), help="Output file. Defaults to '-contrasted' suffixed filename.")
 @click.help_option("-h", "--help")
-def contrast(file, output, contrast):
+def contrast(file, output, ratio):
     """Increase PDF contrast.
 
     \b
@@ -53,14 +53,14 @@ def contrast(file, output, contrast):
     \b
     Ex:
       pdf-tool contrast file.pdf
-      pdf-tool contrast --contrast 1.5 file.pdf
-      pdf-tool cs -c 1.8 -o new.pdf file.pdf
+      pdf-tool contrast --ratio 1.5 file.pdf
+      pdf-tool cs -r 1.8 -o new.pdf file.pdf
     """
 
     if output is None:
         output = util.append_suffix_to_filename(file, "-contrasted")
 
-    change_pdf_contrast(pdf_path=file, output_path=output, contrast=contrast)
+    change_pdf_contrast(pdf_path=file, output_path=output, contrast=ratio)
 
 
 @cli.command(aliases=["sr"], no_args_is_help=True)
