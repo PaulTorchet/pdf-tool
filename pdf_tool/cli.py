@@ -48,7 +48,7 @@ def contrast(file, output, contrast):
 @click.argument("file", type=click.Path(exists=True, dir_okay=False))
 @click.argument("ranges", type=str, required=True, nargs=-1, callback=validate_ranges)
 @click.option("--destination", "-d", type=click.Path(exists=False, dir_okay=True), help="Output directory.")
-@click.option("--name", "-n", type=str, help="Output file name.")
+@click.option("--name", "-n", type=str, help="Output file name with '{i}' as split index.")
 @click.help_option("-h", "--help")
 def split_range(file, ranges, destination, name):
     """Split PDF by ranges."""
@@ -62,6 +62,9 @@ def split_range(file, ranges, destination, name):
     if name is None:
         name = util.get_filename(file_path=file)
 
+    if "{i}" not in name and len(ranges) > 1:
+        name = name.strip() + " {i}"
+
     split_pdf_by_ranges(
         file_path=file, destination=destination, output_name=name, ranges=ranges)
 
@@ -70,7 +73,7 @@ def split_range(file, ranges, destination, name):
 @click.argument("file", type=click.Path(exists=True, dir_okay=False))
 @click.option("--interval", "-i", type=int, default=1, help="Interval used to split PDF. Default to 1.")
 @click.option("--destination", "-d", type=click.Path(exists=False, dir_okay=True), help="Output directory.")
-@click.option("--name", "-n", type=str, help="Output file name.")
+@click.option("--name", "-n", type=str, help="Output file name with '{i}' as split index.")
 @click.help_option("-h", "--help")
 def split_interval(file, interval, destination, name):
     """Split PDF by interval."""
@@ -83,6 +86,9 @@ def split_interval(file, interval, destination, name):
 
     if name is None:
         name = util.get_filename(file_path=file)
+
+    if "{i}" not in name:
+        name = name.strip() + " {i}"
 
     split_pdf_by_interval(
         file_path=file, destination=destination, output_name=name, interval=interval)

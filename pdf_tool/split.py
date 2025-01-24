@@ -47,7 +47,7 @@ def write_pdf_chunks(pdf_chunks: list, destination: str, filename: str):
         os.makedirs(destination)
 
     for index, chunk in enumerate(pdf_chunks):
-        chunk_name = filename.strip() + " " + str(index + 1) + ".pdf"
+        chunk_name = filename.strip().format(i=index + 1) + ".pdf"
 
         write_pdf(pages=chunk, output_path=os.path.join(destination, chunk_name))        
 
