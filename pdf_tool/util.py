@@ -1,13 +1,13 @@
+"""Utilities submodule."""
+
 import os
-
-from typing import Any, Dict, List, Optional
-
 from pathlib import Path
+from typing import Any
 
 from PyPDF2 import PageObject, PdfReader, PdfWriter
 
 
-def get_filename(file_path: str, with_extension: bool = False) -> str:
+def get_filename(file_path: str, *, with_extension: bool = False) -> str:
     """Get file name.
 
     Args:
@@ -73,11 +73,8 @@ def append_suffix_to_filename(file_path: str, suffix: str) -> str:
     return os.path.join(parent, new_filename)
 
 
-def get_file_size(file_path: str) -> Dict[str, float]:
+def get_file_size(file_path: str) -> dict[str, float]:
     """Return a dictionary with file size in bytes, Mb and Kb.
-
-    Args:
-        file_path (str): File path.
 
     Returns:
         Dict[str, float]: Dictionary with file sizes.
@@ -94,12 +91,12 @@ def get_file_size(file_path: str) -> Dict[str, float]:
     }
 
 
-def reorganize_array(array: list, order: list) -> str:
+def reorganize_array(array: list, order: list[int]) -> str:
     """Reorganize an array with a list of indexes.
 
     Args:
         array (list): Array to reorganize
-        order (list): List of indexes.
+        order (list[int]): List of indexes.
 
     Returns:
         str: Reorganized array.
@@ -112,7 +109,7 @@ def reorganize_array(array: list, order: list) -> str:
     return organized_array
 
 
-def sanitize_metadatas(metadatas: Dict[str, Any]) -> Dict[str, str]:
+def sanitize_metadatas(metadatas: dict[str, Any]) -> dict[str, str]:
     """Transform metadatas dictionary values to strings.
 
     Args:
@@ -137,10 +134,10 @@ def read_pdf(file_path: str) -> PdfReader:
 
 
 def write_pdf(
-    pages: List[PageObject],
+    pages: list[PageObject],
     output_path: str,
-    metadatas: Optional[Dict[str, Any]] = None,
-):
+    metadatas: dict[str, Any] | None = None,
+) -> None:
     """Write a PDF file.
 
     Args:

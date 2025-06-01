@@ -1,20 +1,19 @@
+"""PDF Cutting submodule."""
+
 # filename, direction, ratio, pages to keep (1, 2L, 3R) or (R, L)
 
-from enum import Enum, auto
-from decimal import Decimal
-from typing import Tuple
-
+from copy import deepcopy
 from dataclasses import dataclass
+from decimal import Decimal
+from enum import Enum, auto
 
 from PyPDF2 import PageObject
-from copy import deepcopy
 
 from pdf_tool.util import read_pdf, write_pdf
 
 
 @dataclass
 class AngleProperties:
-
     width: str
 
     left: str
@@ -69,23 +68,16 @@ ANGLES_PROPERTIES = {
 
 
 class CutDirection(Enum):
-
     VERTICALLY = auto()
     HORIZONTALLY = auto()
 
 
-def cut_page_vertically(
-    page: PageObject, ratio: float
-) -> Tuple[PageObject, PageObject]:
+def cut_page_vertically(page: PageObject, ratio: float) -> tuple[PageObject, PageObject]:
     properties = ANGLES_PROPERTIES[page.rotation]
 
     width: Decimal = getattr(page.cropbox, properties.width)
 
-    middle_width = (
-        width * Decimal(ratio)
-        if properties.positive_ratio
-        else width * (1 - Decimal(ratio))
-    )
+    middle_width = width * Decimal(ratio) if properties.positive_ratio else width * (1 - Decimal(ratio))
 
     left = deepcopy(page)
     setattr(left.cropbox, properties.right, middle_width)
@@ -96,18 +88,12 @@ def cut_page_vertically(
     return left, right
 
 
-def cut_page_horizontally(
-    page: PageObject, ratio: float
-) -> Tuple[PageObject, PageObject]:
+def cut_page_horizontally(page: PageObject, ratio: float) -> tuple[PageObject, PageObject]:
     properties = ANGLES_PROPERTIES[page.rotation]
 
     height: Decimal = getattr(page.cropbox, properties.height)
 
-    middle_height = (
-        height * Decimal(ratio)
-        if properties.positive_ratio
-        else height * (1 - Decimal(ratio))
-    )
+    middle_height = height * Decimal(ratio) if properties.positive_ratio else height * (1 - Decimal(ratio))
 
     top = deepcopy(page)
     setattr(top.cropbox, properties.bottom, middle_height)
@@ -118,21 +104,16 @@ def cut_page_horizontally(
     return top, bottom
 
 
-def cut_page(
-    page: PageObject, ratio: float, direction: CutDirection
-) -> Tuple[PageObject, PageObject]:
+def cut_page(page: PageObject, ratio: float, direction: CutDirection) -> tuple[PageObject, PageObject]:
     if direction == CutDirection.VERTICALLY:
         return cut_page_vertically(page=page, ratio=ratio)
-    elif direction == CutDirection.HORIZONTALLY:
+    if direction == CutDirection.HORIZONTALLY:
         return cut_page_horizontally(page=page, ratio=ratio)
 
-    else:
-        raise NotImplementedError
+    raise NotImplementedError
 
 
-def cut_pdf(
-    file_path: str, destination: str, ratio: float, direction: CutDirection
-) -> None:
+def cut_pdf(file_path: str, destination: str, ratio: float, direction: CutDirection) -> None:
     pdf = read_pdf(file_path=file_path)
 
     result = []

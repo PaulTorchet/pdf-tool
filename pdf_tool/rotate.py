@@ -1,7 +1,12 @@
+"""PDF Rotation submodule."""
+
 # filename, direction, ratio, pages to keep (1, 2L, 3R) or (R, L)
 
-from PyPDF2 import PageObject
+# ruff: noqa: T201
+
 from copy import copy
+
+from PyPDF2 import PageObject
 
 from pdf_tool.util import read_pdf, write_pdf
 

@@ -1,25 +1,26 @@
+"""PDF-Tool CLI."""
+
+# ruff: noqa: D301, DOC501
+
 import os
 
 import click
-
 from click_aliases import ClickAliasedGroup
 
 from pdf_tool import util
-
-from pdf_tool.cut import cut_pdf, CutDirection
-from pdf_tool.exceptions import PdfReorganizeInvalidIndexesException
-from pdf_tool.info import display_pdf_info
+from pdf_tool.cli_validators import validate_order, validate_ranges
 from pdf_tool.contrast import change_pdf_contrast
-from pdf_tool.split import split_pdf_by_interval, split_pdf_by_ranges
+from pdf_tool.cut import CutDirection, cut_pdf
+from pdf_tool.exceptions import PdfReorganizeInvalidIndexesError
+from pdf_tool.info import display_pdf_info
 from pdf_tool.reorganize import reorganize_pdf
-from pdf_tool.cli_validators import validate_ranges, validate_order
+from pdf_tool.split import split_pdf_by_interval, split_pdf_by_ranges
 
 
 @click.group(cls=ClickAliasedGroup)
 @click.version_option("0.0.1", "--version", "-V", prog_name="pdf-tool")
-def cli():
+def cli() -> None:
     """PDF editing tools."""
-    pass
 
 
 @cli.command(aliases=["i"], no_args_is_help=True)
@@ -32,7 +33,7 @@ def cli():
     help="Output data as JSON instead of table.",
 )
 @click.help_option("-h", "--help")
-def info(file, output_json):
+def info(file: str, *, output_json: bool) -> None:
     """Display PDF info.
 
     \b
@@ -45,9 +46,7 @@ def info(file, output_json):
 
 @cli.command(aliases=["cs"], no_args_is_help=True)
 @click.argument("file", type=click.Path(exists=True, dir_okay=False))
-@click.option(
-    "--ratio", "-r", type=float, default=2, help="Contrast ratio. Defaults to 2."
-)
+@click.option("--ratio", "-r", type=float, default=2, help="Contrast ratio. Defaults to 2.")
 @click.option(
     "--output",
     "-o",
@@ -55,7 +54,7 @@ def info(file, output_json):
     help="Output file. Defaults to '-contrasted' suffixed filename.",
 )
 @click.help_option("-h", "--help")
-def contrast(file, output, ratio):
+def contrast(file: str, output: str, ratio: float) -> None:
     """Increase PDF contrast.
 
     \b
@@ -70,7 +69,6 @@ def contrast(file, output, ratio):
       pdf-tool contrast --ratio 1.5 file.pdf
       pdf-tool cs -r 1.8 -o new.pdf file.pdf
     """
-
     if output is None:
         output = util.append_suffix_to_filename(file, "-contrasted")
 
@@ -93,7 +91,7 @@ def contrast(file, output, ratio):
     help="Output file name with '{i}' as split index. Defaults to the input filename with the split index.",
 )
 @click.help_option("-h", "--help")
-def split_range(file, ranges, destination, name):
+def split_range(file: str, ranges: list[tuple[int, int]], destination: str, name: str) -> None:
     """Split PDF pages by ranges.
 
     \b
@@ -102,11 +100,8 @@ def split_range(file, ranges, destination, name):
       pdf-tool split-range --name "New file.pdf" file.pdf 1-2 3 4-6
       pdf-tool sr -d new/dir -n "New file {i}.pdf" file.pdf 1-10 5-6 11 3
     """
-
     if destination is None:
-        destination = os.path.join(
-            util.get_file_parent(file_path=file), util.get_filename(file_path=file)
-        )
+        destination = os.path.join(util.get_file_parent(file_path=file), util.get_filename(file_path=file))
 
     if name is None:
         name = util.get_filename(file_path=file)
@@ -114,9 +109,7 @@ def split_range(file, ranges, destination, name):
     if "{i}" not in name and len(ranges) > 1:
         name = name.strip() + " {i}"
 
-    split_pdf_by_ranges(
-        file_path=file, destination=destination, output_name=name, ranges=ranges
-    )
+    split_pdf_by_ranges(file_path=file, destination=destination, output_name=name, ranges=ranges)
 
 
 @cli.command(aliases=["si"], no_args_is_help=True)
@@ -141,7 +134,7 @@ def split_range(file, ranges, destination, name):
     help="Output file name with '{i}' as split index. Defaults to the input filename with the split index.",
 )
 @click.help_option("-h", "--help")
-def split_interval(file, interval, destination, name):
+def split_interval(file: str, interval: int, destination: str, name: str) -> None:
     """Split PDF pages by interval.
 
     \b
@@ -150,11 +143,8 @@ def split_interval(file, interval, destination, name):
       pdf-tool split-interval --interval 3 --name "New file.pdf" file.pdf
       pdf-tool si -i 2 -d new/dir -n "New file {i}.pdf" file.pdf
     """
-
     if destination is None:
-        destination = os.path.join(
-            util.get_file_parent(file_path=file), util.get_filename(file_path=file)
-        )
+        destination = os.path.join(util.get_file_parent(file_path=file), util.get_filename(file_path=file))
 
     if name is None:
         name = util.get_filename(file_path=file)
@@ -162,9 +152,7 @@ def split_interval(file, interval, destination, name):
     if "{i}" not in name:
         name = name.strip() + " {i}"
 
-    split_pdf_by_interval(
-        file_path=file, destination=destination, output_name=name, interval=interval
-    )
+    split_pdf_by_interval(file_path=file, destination=destination, output_name=name, interval=interval)
 
 
 @cli.command(aliases=["r"], no_args_is_help=True)
@@ -177,7 +165,7 @@ def split_interval(file, interval, destination, name):
     help="Output file. Defaults to '-reorganized' suffixed filename.",
 )
 @click.help_option("-h", "--help")
-def reorganize(file, order, output):
+def reorganize(file: str, order: list[int], output: str) -> None:
     """Reorganize PDF pages.
 
     \b
@@ -186,14 +174,13 @@ def reorganize(file, order, output):
       pdf-tool reorganize --output new.pdf file.pdf 1 1 3 2
       pdf-tool r -o new.pdf file.pdf 1 2 1 2 8 5
     """
-
     if output is None:
         output = util.append_suffix_to_filename(file, "-reorganized")
 
     try:
         reorganize_pdf(file_path=file, destination=output, pages_order=order)
-    except PdfReorganizeInvalidIndexesException as error:
-        raise click.BadArgumentUsage(str(error))
+    except PdfReorganizeInvalidIndexesError as error:
+        raise click.BadArgumentUsage(str(error)) from error
 
 
 @cli.command(aliases=["ct"], no_args_is_help=True)
@@ -205,9 +192,7 @@ def reorganize(file, order, output):
     default=0.5,
     help="Cut ratio.",
 )
-@click.option(
-    "--output", "-o", type=click.Path(exists=False, dir_okay=False), help="Output file."
-)
+@click.option("--output", "-o", type=click.Path(exists=False, dir_okay=False), help="Output file.")
 @click.option(
     "--vertically/--horizontally",
     "-vrt/-hrz",
@@ -215,7 +200,7 @@ def reorganize(file, order, output):
     help="Cut PDF vertically or horitontally. Defaults to vertically.",
 )
 @click.help_option("-h", "--help")
-def cut(file, ratio, output, vertically):
+def cut(file: str, ratio: float, output: str, *, vertically: bool) -> None:
     """Cut PDF pages vertically or horizontally.
 
     \b
@@ -224,7 +209,6 @@ def cut(file, ratio, output, vertically):
         pdf-tool cut --horizontally --ratio 0.42 --output new.pdf file.pdf
         pdf-tool ct -hrz -r 0.64 -o new.pdf file.pdf
     """
-
     if output is None:
         output = util.append_suffix_to_filename(file, "-cut")
 

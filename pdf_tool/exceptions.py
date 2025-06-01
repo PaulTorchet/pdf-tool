@@ -1,9 +1,9 @@
 """Exceptions module."""
 
 
-class PdfToolBaseException(Exception):
+class PdfToolBaseError(Exception):
     """PDF Tool Base Exception."""
 
 
-class PdfReorganizeInvalidIndexesException(PdfToolBaseException):
+class PdfReorganizeInvalidIndexesError(PdfToolBaseError):
     """PDF Reorganize Invalid indexes."""

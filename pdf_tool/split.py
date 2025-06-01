@@ -1,3 +1,5 @@
+"""PDF Splitting submodule."""
+
 import os
 
 from pdf_tool.util import read_pdf, write_pdf
@@ -16,7 +18,7 @@ def split_array_by_interval(array: list, interval: int) -> list[list]:
     splitted_array = []
 
     for i in range(0, len(array), interval):
-        splitted_array.append(array[i:i+interval])
+        splitted_array.append(array[i : i + interval])
 
     return splitted_array
 
@@ -34,46 +36,37 @@ def split_array_by_ranges(array: list, ranges: list[tuple]) -> list[list]:
     splitted_array = []
 
     for start, end in ranges:
-        sub_array = array[start - 1:end]
+        sub_array = array[start - 1 : end]
         if sub_array:
             splitted_array.append(sub_array)
 
     return splitted_array
 
 
-def write_pdf_chunks(pdf_chunks: list, destination: str, filename: str):
-
+def write_pdf_chunks(pdf_chunks: list, destination: str, filename: str) -> None:
     if not os.path.exists(destination):
         os.makedirs(destination)
 
     for index, chunk in enumerate(pdf_chunks):
         chunk_name = filename.strip().format(i=index + 1) + ".pdf"
 
-        write_pdf(pages=chunk, output_path=os.path.join(destination, chunk_name))        
+        write_pdf(pages=chunk, output_path=os.path.join(destination, chunk_name))
 
 
-def split_pdf_by_interval(file_path: str, destination: str, output_name: str, interval: int):
+def split_pdf_by_interval(file_path: str, destination: str, output_name: str, interval: int) -> None:
     pdf = read_pdf(file_path)
 
     pdf_chunks = split_array_by_interval(array=pdf.pages, interval=interval)
 
-    write_pdf_chunks(
-        pdf_chunks=pdf_chunks,
-        destination=destination,
-        filename=output_name
-    )
+    write_pdf_chunks(pdf_chunks=pdf_chunks, destination=destination, filename=output_name)
 
 
-def split_pdf_by_ranges(file_path: str, destination: str, output_name: str, ranges: list[tuple]):
+def split_pdf_by_ranges(file_path: str, destination: str, output_name: str, ranges: list[tuple]) -> None:
     pdf = read_pdf(file_path)
 
     pdf_chunks = split_array_by_ranges(array=pdf.pages, ranges=ranges)
 
-    write_pdf_chunks(
-        pdf_chunks=pdf_chunks,
-        destination=destination,
-        filename=output_name
-    )
+    write_pdf_chunks(pdf_chunks=pdf_chunks, destination=destination, filename=output_name)
 
 
 if __name__ == "__main__":
@@ -87,5 +80,5 @@ if __name__ == "__main__":
         file_path="pdfs/bol.pdf",
         destination="pdfs/Best Of Lady Gaga",
         output_name="Best Of Lady Gaga - Trompette",
-        ranges=[(1, 2), (3, 4), (5, 6)]
+        ranges=[(1, 2), (3, 4), (5, 6)],
     )
