@@ -16,26 +16,30 @@ def list_files(folder_path: str):
     return sorted(os.listdir(folder_path))
 
 
-def pdf_to_images(pdf_path: str, output_folder: str, format: str = "jpeg", dpi: int = DEFAULT_DPI):
+def pdf_to_images(
+    pdf_path: str, output_folder: str, format: str = "jpeg", dpi: int = DEFAULT_DPI
+):
     filename = get_filename(pdf_path)
 
     pdf2image.convert_from_path(
-        pdf_path, output_folder=output_folder, fmt=format, dpi=dpi, output_file=filename)
+        pdf_path, output_folder=output_folder, fmt=format, dpi=dpi, output_file=filename
+    )
 
-    files = [path for path in list_files(
-        output_folder) if path.startswith(filename)]
+    files = [path for path in list_files(output_folder) if path.startswith(filename)]
 
     return [os.path.join(output_folder, path) for path in files]
 
 
 def images_to_pdf(images_paths: list[str], output_path: str):
-    images = [open(image, "rb") for image in images_paths]
+    images = [open(image, "rb") for image in images_paths]  # noqa: SIM115
 
     with open(output_path, "wb") as output_stream:
         img2pdf.convert(*images, outputstream=output_stream)
 
 
-def change_image_contrast(image_path: str, contrast: float, tile_size: tuple[int, int] = DEFAULT_TILE_SIZE):
+def change_image_contrast(
+    image_path: str, contrast: float, tile_size: tuple[int, int] = DEFAULT_TILE_SIZE
+):
 
     with Image.open(image_path) as img:
         img_width, img_height = img.size
@@ -78,8 +82,4 @@ if __name__ == "__main__":
     input_file = "./pdfs/gray.pdf"
     output_file = "./pdfs/contrasted.pdf"
 
-    change_pdf_contrast(
-        pdf_path=input_file,
-        output_path=output_file,
-        contrast=3
-    )
+    change_pdf_contrast(pdf_path=input_file, output_path=output_file, contrast=3)

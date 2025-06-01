@@ -191,7 +191,7 @@ def reorganize(file, order, output):
     try:
         reorganize_pdf(file_path=file, destination=output, pages_order=order)
     except PdfReorganizeInvalidIndexesException as error:
-        raise click.BadArgumentUsage(str(error))
+        raise click.BadArgumentUsage(str(error)) from error
 
 
 @cli.command(aliases=["ct"], no_args_is_help=True)

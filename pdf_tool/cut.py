@@ -4,7 +4,6 @@ from copy import deepcopy
 from dataclasses import dataclass
 from decimal import Decimal
 from enum import Enum, auto
-from typing import Tuple
 
 from PyPDF2 import PageObject
 
@@ -75,7 +74,7 @@ class CutDirection(Enum):
 
 def cut_page_vertically(
     page: PageObject, ratio: float
-) -> Tuple[PageObject, PageObject]:
+) -> tuple[PageObject, PageObject]:
     properties = ANGLES_PROPERTIES[page.rotation]
 
     width: Decimal = getattr(page.cropbox, properties.width)
@@ -97,7 +96,7 @@ def cut_page_vertically(
 
 def cut_page_horizontally(
     page: PageObject, ratio: float
-) -> Tuple[PageObject, PageObject]:
+) -> tuple[PageObject, PageObject]:
     properties = ANGLES_PROPERTIES[page.rotation]
 
     height: Decimal = getattr(page.cropbox, properties.height)
@@ -119,7 +118,7 @@ def cut_page_horizontally(
 
 def cut_page(
     page: PageObject, ratio: float, direction: CutDirection
-) -> Tuple[PageObject, PageObject]:
+) -> tuple[PageObject, PageObject]:
     if direction == CutDirection.VERTICALLY:
         return cut_page_vertically(page=page, ratio=ratio)
     elif direction == CutDirection.HORIZONTALLY:

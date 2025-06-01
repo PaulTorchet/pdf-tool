@@ -1,10 +1,9 @@
-from typing import List
 
 from pdf_tool.exceptions import PdfReorganizeInvalidIndexesException
 from pdf_tool.util import read_pdf, reorganize_array, write_pdf
 
 
-def reorganize_pdf(file_path: str, destination: str, pages_order: List[int]):
+def reorganize_pdf(file_path: str, destination: str, pages_order: list[int]):
     pdf = read_pdf(file_path)
 
     pages_count = len(pdf.pages)

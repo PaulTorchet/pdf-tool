@@ -1,5 +1,5 @@
 import json
-from typing import Any, Dict
+from typing import Any
 
 from rich import print
 from rich.table import Table
@@ -7,7 +7,7 @@ from rich.table import Table
 from pdf_tool.util import get_file_size, get_filename, read_pdf
 
 
-def get_pdf_info(file_path: str) -> Dict[str, Any]:
+def get_pdf_info(file_path: str) -> dict[str, Any]:
     pdf = read_pdf(file_path)
 
     info = {
@@ -21,7 +21,7 @@ def get_pdf_info(file_path: str) -> Dict[str, Any]:
     return info
 
 
-def print_info_table(pdf_info: Dict[str, Any]) -> None:
+def print_info_table(pdf_info: dict[str, Any]) -> None:
     table = Table()
 
     table.add_column("Property")

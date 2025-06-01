@@ -18,7 +18,8 @@ def validate_ranges(ctx, param, value):
 
         else:
             raise BadParameter(
-                f"{curr_range}. Ranges should be formatted like this : \"1-3 4 5-5 ...\"")
+                f'{curr_range}. Ranges should be formatted like this : "1-3 4 5-5 ..."'
+            )
 
     return formatted_ranges
 
@@ -30,8 +31,8 @@ def validate_order(ctx, param, value):
     for index in value:
         try:
             indexes.append(int(index))
-        except ValueError:
-            raise BadParameter(f"'{index}'. Must be an integer.")
+        except ValueError as error:
+            raise BadParameter(f"'{index}'. Must be an integer.") from error
 
     return indexes
 
