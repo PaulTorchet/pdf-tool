@@ -1,3 +1,5 @@
+"""Utilities submodule."""
+
 import os
 from pathlib import Path
 from typing import Any
@@ -5,7 +7,7 @@ from typing import Any
 from PyPDF2 import PageObject, PdfReader, PdfWriter
 
 
-def get_filename(file_path: str, with_extension: bool = False) -> str:
+def get_filename(file_path: str, *, with_extension: bool = False) -> str:
     """Get file name.
 
     Args:
@@ -74,9 +76,6 @@ def append_suffix_to_filename(file_path: str, suffix: str) -> str:
 def get_file_size(file_path: str) -> dict[str, float]:
     """Return a dictionary with file size in bytes, Mb and Kb.
 
-    Args:
-        file_path (str): File path.
-
     Returns:
         Dict[str, float]: Dictionary with file sizes.
     """
@@ -92,12 +91,12 @@ def get_file_size(file_path: str) -> dict[str, float]:
     }
 
 
-def reorganize_array(array: list, order: list) -> str:
+def reorganize_array(array: list, order: list[int]) -> str:
     """Reorganize an array with a list of indexes.
 
     Args:
         array (list): Array to reorganize
-        order (list): List of indexes.
+        order (list[int]): List of indexes.
 
     Returns:
         str: Reorganized array.
@@ -138,7 +137,7 @@ def write_pdf(
     pages: list[PageObject],
     output_path: str,
     metadatas: dict[str, Any] | None = None,
-):
+) -> None:
     """Write a PDF file.
 
     Args:

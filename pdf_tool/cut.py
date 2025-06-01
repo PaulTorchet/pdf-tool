@@ -1,3 +1,5 @@
+"""PDF Cutting submodule."""
+
 # filename, direction, ratio, pages to keep (1, 2L, 3R) or (R, L)
 
 from copy import deepcopy
@@ -105,11 +107,10 @@ def cut_page_horizontally(page: PageObject, ratio: float) -> tuple[PageObject, P
 def cut_page(page: PageObject, ratio: float, direction: CutDirection) -> tuple[PageObject, PageObject]:
     if direction == CutDirection.VERTICALLY:
         return cut_page_vertically(page=page, ratio=ratio)
-    elif direction == CutDirection.HORIZONTALLY:
+    if direction == CutDirection.HORIZONTALLY:
         return cut_page_horizontally(page=page, ratio=ratio)
 
-    else:
-        raise NotImplementedError
+    raise NotImplementedError
 
 
 def cut_pdf(file_path: str, destination: str, ratio: float, direction: CutDirection) -> None:

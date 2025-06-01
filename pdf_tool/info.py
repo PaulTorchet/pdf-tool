@@ -1,7 +1,9 @@
+"""PDF info submodule."""
+
 import json
 from typing import Any
 
-from rich import print
+from rich import print  # noqa: A004
 from rich.table import Table
 
 from pdf_tool.util import get_file_size, get_filename, read_pdf
@@ -10,15 +12,13 @@ from pdf_tool.util import get_file_size, get_filename, read_pdf
 def get_pdf_info(file_path: str) -> dict[str, Any]:
     pdf = read_pdf(file_path)
 
-    info = {
+    return {
         "pages_count": len(pdf.pages),
         "file_name": get_filename(file_path, with_extension=True),
         "pdf_title": pdf.metadata.title,
         "size": get_file_size(file_path),
         "author": pdf.metadata.author,
     }
-
-    return info
 
 
 def print_info_table(pdf_info: dict[str, Any]) -> None:
@@ -41,7 +41,7 @@ def print_info_table(pdf_info: dict[str, Any]) -> None:
     print(table)
 
 
-def display_pdf_info(file_path: str, output_json: bool = False) -> None:
+def display_pdf_info(file_path: str, *, output_json: bool = False) -> None:
     pdf_info = get_pdf_info(file_path=file_path)
 
     if output_json:

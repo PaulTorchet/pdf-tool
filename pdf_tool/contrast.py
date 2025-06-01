@@ -1,3 +1,5 @@
+"""PDF Contrasting submodule."""
+
 import os
 
 import img2pdf
@@ -11,11 +13,11 @@ DEFAULT_DPI = 300
 DEFAULT_TILE_SIZE = (64, 64)
 
 
-def list_files(folder_path: str):
+def list_files(folder_path: str) -> list[str]:
     return sorted(os.listdir(folder_path))
 
 
-def pdf_to_images(pdf_path: str, output_folder: str, format: str = "jpeg", dpi: int = DEFAULT_DPI):
+def pdf_to_images(pdf_path: str, output_folder: str, format: str = "jpeg", dpi: int = DEFAULT_DPI) -> list[str]:  # noqa: A002
     filename = get_filename(pdf_path)
 
     pdf2image.convert_from_path(pdf_path, output_folder=output_folder, fmt=format, dpi=dpi, output_file=filename)
@@ -25,14 +27,14 @@ def pdf_to_images(pdf_path: str, output_folder: str, format: str = "jpeg", dpi: 
     return [os.path.join(output_folder, path) for path in files]
 
 
-def images_to_pdf(images_paths: list[str], output_path: str):
+def images_to_pdf(images_paths: list[str], output_path: str) -> None:
     images = [open(image, "rb") for image in images_paths]  # noqa: SIM115
 
     with open(output_path, "wb") as output_stream:
         img2pdf.convert(*images, outputstream=output_stream)
 
 
-def change_image_contrast(image_path: str, contrast: float, tile_size: tuple[int, int] = DEFAULT_TILE_SIZE):
+def change_image_contrast(image_path: str, contrast: float, tile_size: tuple[int, int] = DEFAULT_TILE_SIZE) -> str:
     with Image.open(image_path) as img:
         img_width, img_height = img.size
         enhanced_img = Image.new("RGB", (img_width, img_height))
@@ -50,7 +52,7 @@ def change_image_contrast(image_path: str, contrast: float, tile_size: tuple[int
         return image_path
 
 
-def change_pdf_contrast(pdf_path: str, output_path: str, contrast: float):
+def change_pdf_contrast(pdf_path: str, output_path: str, contrast: float) -> None:
     tmp_folder = os.path.join(get_file_parent(pdf_path), "tmp")
 
     if not os.path.exists(tmp_folder):

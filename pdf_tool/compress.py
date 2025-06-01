@@ -1,7 +1,9 @@
+"""PDF Compressing submodule."""
+
 from pdf_tool.util import read_pdf, write_pdf
 
 
-def compress_pdf(file_path: str, output: str):
+def compress_pdf(file_path: str, output: str) -> None:
     pdf = read_pdf(file_path)
 
     for page in pdf.pages:

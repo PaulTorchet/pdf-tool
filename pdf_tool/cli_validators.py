@@ -1,7 +1,9 @@
+"""CLI Validators submodule."""
+
 from click import BadParameter
 
 
-def validate_ranges(ctx, param, value):
+def validate_ranges(ctx, param, value: list[str]) -> list[tuple[int, int]]:  # noqa: ARG001, ANN001
     if value is None:
         return None
 
@@ -22,7 +24,7 @@ def validate_ranges(ctx, param, value):
     return formatted_ranges
 
 
-def validate_order(ctx, param, value):
+def validate_order(ctx, param, value: list[str]) -> list[int]:  # noqa: ARG001, ANN001
     indexes = []
 
     for index in value:
@@ -35,4 +37,4 @@ def validate_order(ctx, param, value):
 
 
 if __name__ == "__main__":
-    print(validate_ranges(None, None, "1-2 5 3-4"))
+    print(validate_ranges(None, None, "1-2 5 3-4"))  # noqa: T201

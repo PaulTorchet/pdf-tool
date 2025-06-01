@@ -1,4 +1,8 @@
+"""PDF Rotation submodule."""
+
 # filename, direction, ratio, pages to keep (1, 2L, 3R) or (R, L)
+
+# ruff: noqa: T201
 
 from copy import copy
 
