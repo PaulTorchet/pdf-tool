@@ -17,15 +17,12 @@ def validate_ranges(ctx, param, value):
             formatted_ranges.append((int(curr_range), int(curr_range)))
 
         else:
-            raise BadParameter(
-                f'{curr_range}. Ranges should be formatted like this : "1-3 4 5-5 ..."'
-            )
+            raise BadParameter(f'{curr_range}. Ranges should be formatted like this : "1-3 4 5-5 ..."')
 
     return formatted_ranges
 
 
 def validate_order(ctx, param, value):
-
     indexes = []
 
     for index in value:

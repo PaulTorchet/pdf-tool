@@ -43,9 +43,7 @@ def info(file, output_json):
 
 @cli.command(aliases=["cs"], no_args_is_help=True)
 @click.argument("file", type=click.Path(exists=True, dir_okay=False))
-@click.option(
-    "--ratio", "-r", type=float, default=2, help="Contrast ratio. Defaults to 2."
-)
+@click.option("--ratio", "-r", type=float, default=2, help="Contrast ratio. Defaults to 2.")
 @click.option(
     "--output",
     "-o",
@@ -102,9 +100,7 @@ def split_range(file, ranges, destination, name):
     """
 
     if destination is None:
-        destination = os.path.join(
-            util.get_file_parent(file_path=file), util.get_filename(file_path=file)
-        )
+        destination = os.path.join(util.get_file_parent(file_path=file), util.get_filename(file_path=file))
 
     if name is None:
         name = util.get_filename(file_path=file)
@@ -112,9 +108,7 @@ def split_range(file, ranges, destination, name):
     if "{i}" not in name and len(ranges) > 1:
         name = name.strip() + " {i}"
 
-    split_pdf_by_ranges(
-        file_path=file, destination=destination, output_name=name, ranges=ranges
-    )
+    split_pdf_by_ranges(file_path=file, destination=destination, output_name=name, ranges=ranges)
 
 
 @cli.command(aliases=["si"], no_args_is_help=True)
@@ -150,9 +144,7 @@ def split_interval(file, interval, destination, name):
     """
 
     if destination is None:
-        destination = os.path.join(
-            util.get_file_parent(file_path=file), util.get_filename(file_path=file)
-        )
+        destination = os.path.join(util.get_file_parent(file_path=file), util.get_filename(file_path=file))
 
     if name is None:
         name = util.get_filename(file_path=file)
@@ -160,9 +152,7 @@ def split_interval(file, interval, destination, name):
     if "{i}" not in name:
         name = name.strip() + " {i}"
 
-    split_pdf_by_interval(
-        file_path=file, destination=destination, output_name=name, interval=interval
-    )
+    split_pdf_by_interval(file_path=file, destination=destination, output_name=name, interval=interval)
 
 
 @cli.command(aliases=["r"], no_args_is_help=True)
@@ -203,9 +193,7 @@ def reorganize(file, order, output):
     default=0.5,
     help="Cut ratio.",
 )
-@click.option(
-    "--output", "-o", type=click.Path(exists=False, dir_okay=False), help="Output file."
-)
+@click.option("--output", "-o", type=click.Path(exists=False, dir_okay=False), help="Output file.")
 @click.option(
     "--vertically/--horizontally",
     "-vrt/-hrz",
