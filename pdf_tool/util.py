@@ -1,8 +1,6 @@
 import os
-
-from typing import Any, Dict, List, Optional
-
 from pathlib import Path
+from typing import Any, Dict, List, Optional
 
 from PyPDF2 import PageObject, PdfReader, PdfWriter
 

@@ -2,10 +2,9 @@ import os
 
 import img2pdf
 import pdf2image
+from PIL import Image, ImageEnhance
 
-from PIL import ImageEnhance, Image
-
-from pdf_tool.util import get_filename, get_file_parent
+from pdf_tool.util import get_file_parent, get_filename
 
 DEFAULT_DPI = 300
 # DEFAULT_TILE_SIZE = (128, 128)

@@ -1,13 +1,12 @@
 # filename, direction, ratio, pages to keep (1, 2L, 3R) or (R, L)
 
-from enum import Enum, auto
+from copy import deepcopy
+from dataclasses import dataclass
 from decimal import Decimal
+from enum import Enum, auto
 from typing import Tuple
 
-from dataclasses import dataclass
-
 from PyPDF2 import PageObject
-from copy import deepcopy
 
 from pdf_tool.util import read_pdf, write_pdf
 

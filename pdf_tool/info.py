@@ -1,11 +1,10 @@
-from typing import Any, Dict
-
 import json
+from typing import Any, Dict
 
 from rich import print
 from rich.table import Table
 
-from pdf_tool.util import get_filename, get_file_size, read_pdf
+from pdf_tool.util import get_file_size, get_filename, read_pdf
 
 
 def get_pdf_info(file_path: str) -> Dict[str, Any]:
