@@ -1,5 +1,6 @@
 """Utilities submodule."""
 
+import itertools
 import os
 from pathlib import Path
 from typing import Any
@@ -107,6 +108,18 @@ def reorganize_array(array: list, order: list[int]) -> str:
         organized_array.append(array[index - 1])
 
     return organized_array
+
+
+def merge_arrays(arrays: list[list]) -> list:
+    """Merge multiple arrays.
+
+    Args:
+        arrays (list[list]): Arrays to merge
+
+    Returns:
+        list: Merged arrays in one.
+    """
+    return list(itertools.chain(*arrays))
 
 
 def sanitize_metadatas(metadatas: dict[str, Any]) -> dict[str, str]:
