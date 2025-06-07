@@ -13,8 +13,11 @@ from pdf_tool.contrast import change_pdf_contrast
 from pdf_tool.cut import CutDirection, cut_pdf
 from pdf_tool.exceptions import PdfReorganizeInvalidIndexesError
 from pdf_tool.info import display_pdf_info
+from pdf_tool.merge import merge_pdfs
 from pdf_tool.reorganize import reorganize_pdf
 from pdf_tool.split import split_pdf_by_interval, split_pdf_by_ranges
+
+MIN_MERGED_PDFS_COUNT = 2
 
 
 @click.group(cls=ClickAliasedGroup)
@@ -181,6 +184,33 @@ def reorganize(file: str, order: list[int], output: str) -> None:
         reorganize_pdf(file_path=file, destination=output, pages_order=order)
     except PdfReorganizeInvalidIndexesError as error:
         raise click.BadArgumentUsage(str(error)) from error
+
+
+@cli.command(aliases=["m"], no_args_is_help=True)
+@click.argument("files", type=click.Path(exists=True, dir_okay=False), nargs=-1)
+@click.option(
+    "--output",
+    "-o",
+    type=click.Path(exists=False, dir_okay=False),
+    help="Output file. Defaults to '-merged' suffixed filename.",
+)
+@click.help_option("-h", "--help")
+def merge(files: list[str], output: str) -> None:
+    """Merge PDFs pages.
+
+    \b
+    Ex:
+      pdf-tool merge file1.pdf file2.pdf
+      pdf-tool merge --output new.pdf file1.pdf file2.pdf file3.pdf
+      pdf-tool m -o new.pdf file1.pdf file2.pdf file3.pdf
+    """
+    if len(files) < MIN_MERGED_PDFS_COUNT:
+        raise click.BadArgumentUsage("You must provide at least 2 files to merge them.")  # noqa: EM101
+
+    if output is None:
+        output = util.append_suffix_to_filename(files[0], "-merged")
+
+    merge_pdfs(file_paths=files, destination=output)
 
 
 @cli.command(aliases=["ct"], no_args_is_help=True)
