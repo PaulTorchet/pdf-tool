@@ -20,7 +20,7 @@ def get_filename(file_path: str, *, with_extension: bool = False) -> str:
     if with_extension:
         return Path(file_path).name
 
-    return Path(file_path).name.split(".")[0]
+    return Path(file_path).stem
 
 
 def get_file_extension(file_path: str) -> str:
